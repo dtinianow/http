@@ -2,7 +2,6 @@ require 'socket'
 tcp_server = TCPServer.new(9292)
 client = tcp_server.accept
 
-
 request_lines = []
 while line = client.gets and !line.chomp.empty?
   request_lines << line.chomp

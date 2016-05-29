@@ -2,7 +2,7 @@ require 'socket'
 
 class Server
 
-  attr_reader :client
+  attr_reader :client, :tcp_server
 
   def initialize
     @tcp_server = TCPServer.new(9292)
