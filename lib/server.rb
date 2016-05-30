@@ -10,22 +10,26 @@ attr_reader :tcp_server, :hello_count
     @hello_count   = 0
   end
 
-  def output_client_messages(client, req)
-    client.puts "Hello world (#{@hello_count})\n"
-    client.puts req.join("\n")
-    client.close
-  end
-
   def response
-    loop do
-      client = tcp_server.accept
-      request_lines = []
-        while line = client.gets and !line.chomp.empty?
-          request_lines << line.chomp
-        end
-      output_client_messages(client, request_lines)
+    while client = tcp_server.accept
+      request = get_request(client)
+      output_client_messages(client, request)
       @hello_count += 1
     end
+  end
+
+  def get_request(client)
+    request_lines = []
+    while line = client.gets and !line.chomp.empty?
+      request_lines << line.chomp
+    end
+    request_lines
+  end
+
+  def output_client_messages(client, request)
+    client.puts "Hello world (#{@hello_count})\n"
+    client.puts request.join("\n")
+    client.close
   end
 
 end
