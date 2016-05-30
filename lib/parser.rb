@@ -1,3 +1,4 @@
+
 class Parser
 
 #Parse first request line into three parts
@@ -11,10 +12,15 @@ class Parser
 # If /shutdown, post Total Requests: #{total_requests} and shutdown server
   # tcp_server.close
 
-  attr_reader :request, :first_request_line
+  attr_reader :request, :first_request_line, :path
+  attr_accessor :total_requests, :hello_count
 
-  def initialize(request)
-    @request = request
+  def initialize(request, tcp_server)
+    @request       = request
+    @hello_count   = -1
+    @path          = request[0].split(" ")[1]
+    @total_requests = 0
+    @tcp_server = tcp_server
   end
 
   def first_request_line
@@ -30,6 +36,28 @@ class Parser
   def last_request_line
     last_line = request[2].split(" ")
     "Accept: #{last_line[1]}"
+  end
+
+  def check_path
+    case path
+      when "/"
+        self.total_requests += 1
+        request
+      when "/hello".downcase
+        self.hello_count += 1
+        self.total_requests += 1
+        "Hello world (#{self.hello_count})\n"
+      when "/datetime".downcase
+        self.total_requests += 1
+        Date.new.strftime('%m %M %p %A %B %e %Y')
+      when "/shutdown".downcase
+        self.total_requests += 1
+        "Total Requests: #{self.total_requests}"
+        tcp_server.close
+      else
+        self.total_requests += 1
+        "404 Bro"
+      end
   end
 
 end
