@@ -3,19 +3,18 @@ require 'pry'
 
 class Server
 
-attr_reader :tcp_server, :client, :hello_count
+attr_reader :tcp_server, :hello_count
 
   def initialize
-    @tcp_server = TCPServer.new(9292)
-    @hello_count = 0
+    @tcp_server    = TCPServer.new(9292)
+    @hello_count   = 0
   end
 
-  # def request_lines(client)
-  # request_lines = []
-  #   while line = client.gets and !line.chomp.empty?
-  #     request_lines << line.chomp
-  #   end
-  # end
+  def output_client_messages(client, req)
+    client.puts "Hello world (#{@hello_count})\n"
+    client.puts req.join("\n")
+    client.close
+  end
 
   def response
     loop do
@@ -24,9 +23,7 @@ attr_reader :tcp_server, :client, :hello_count
         while line = client.gets and !line.chomp.empty?
           request_lines << line.chomp
         end
-      client.puts "Hello world (#{@hello_count})\n"
-      client.puts request_lines.join("\n")
-      client.close
+      output_client_messages(client, request_lines)
       @hello_count += 1
     end
   end
