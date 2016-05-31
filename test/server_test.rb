@@ -12,6 +12,7 @@ class ServerTest < Minitest::Test
   def test_get_request_returns_a_request
     f = Faraday.get('http://localhost:9292/')
     assert_equal "ruby", f.headers["server"]
+    assert_equal f["content-type"], "text/html; charset=iso-8859-1"
   end
 
   def test_body_of_hello_path
@@ -53,6 +54,10 @@ class ServerTest < Minitest::Test
     f = Faraday.get('http://localhost:9292/')
     assert f.body.include?("Verb:")
   end
+
+
+  #Can we test get_request or start or check_path
+
 
   # def test_root_path
   #   skip

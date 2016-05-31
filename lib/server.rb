@@ -39,9 +39,9 @@ attr_reader :tcp_server, :count
     client.close
   end
 
-  def root_output
-    @parsed_message.request.join("\r\n")
-  end
+  # def root_output
+  #   @parsed_message.request.join("\r\n")
+  # end
 
   def check_path
     case @parsed_message.path.downcase
