@@ -3,6 +3,17 @@ require './lib/server'
 require './lib/parser'
 
 class ParserTest < Minitest::Test
+  # def request
+  #
+  # end
+  #
+  # def setup
+  #   @parser = Parser.new
+  # end
+  #
+  # def test_it_defined_verb
+  #   assert_equal "GET", @parser.verb
+  # end
 
   def test_parser_exists
     request = ["GET / HTTP/1.1",

@@ -6,7 +6,16 @@ class Parser
 
   def initialize(request)
     @request       = request
-    @path          = request[0].split(" ")[1]
+    @path          = request[0].split(" ")[1].split('?')[0]
+  end
+
+  #if request[0].split(" ")[1].include?('?')
+  # @path = path?param=value
+  def word
+    if request[0].split(" ")[1].split('?')[1].split('=')[0] == 'word'
+      word = request[0].split(" ")[1].split('?')[1].split('=')[1]
+    end
+    word  #redirect if word not there.
   end
 
   def first_request_line
