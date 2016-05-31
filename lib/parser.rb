@@ -15,7 +15,7 @@ class Parser
     if request[0].split(" ")[1].split('?')[1].split('=')[0] == 'word'
       word = request[0].split(" ")[1].split('?')[1].split('=')[1]
     end
-    word  #redirect if word not there.
+    word  #redirect if word not there. #rubular
   end
 
   def first_request_line
