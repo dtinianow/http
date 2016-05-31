@@ -1,20 +1,12 @@
+
 class Parser
 
-#Parse first request line into three parts
-#Check the second element and create conditionals
+  attr_reader :request, :all_request_lines, :path
 
-# Create total_request counter and increment by one for each live request
-
-# If /, do nothing (ie return get_request method)
-# If /hello, increase hello_count by one
-# If /datetime, post datetime in format
-# If /shutdown, post Total Requests: #{total_requests} and shutdown server
-  # tcp_server.close
-
-  attr_reader :request, :first_request_line
 
   def initialize(request)
-    @request = request
+    @request       = request
+    @path          = request[0].split(" ")[1]
   end
 
   def first_request_line
@@ -30,6 +22,10 @@ class Parser
   def last_request_line
     last_line = request[2].split(" ")
     "Accept: #{last_line[1]}"
+  end
+
+  def all_request_lines
+    "#{first_request_line}\n#{remaining_request_lines}\n#{last_request_line}"
   end
 
 end
