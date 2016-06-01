@@ -54,6 +54,19 @@ attr_reader :tcp_server, :count, :response
         response.return_path_shutdown(count)
       when "/word_search"
         response.return_path_word_search(@parsed_message, count)
+        #when "/start_game"
+          #response.return_path_start_game
+          #check parser.request_info["Verb:"]
+            #If verb is post, pick a random number between 0 and 100
+        #when "/game"
+          #check parser.request_info["Verb:"]
+            #If verb is GET
+              #Return number of guesses made
+              #Return whether most recent guess was too high, too low, or correct
+            #If verb is POST && parameter == 'guess'
+              #save guess, increase guess count, and send redirect to GET page
+
+
       else
         response.return_path_unknown(count)
       end

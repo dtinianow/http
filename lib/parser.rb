@@ -4,9 +4,9 @@ class Parser
   attr_reader :request, :request_info, :all_request_lines, :path
 
   def initialize(request)
-    @request       = request
-    @path          = request[0].split(" ")[1].split('?')[0]
-    @request_info = {}
+    @request         = request
+    @path            = request[0].split(" ")[1].split('?')[0]
+    @request_info    = {}
     @initialize_info = initialize_info
   end
 
