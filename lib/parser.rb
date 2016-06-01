@@ -7,6 +7,7 @@ class Parser
     @request       = request
     @path          = request[0].split(" ")[1].split('?')[0]
     @request_info = {}
+    @initialize_info = initialize_info
   end
 
   def word
@@ -16,7 +17,7 @@ class Parser
     word  #redirect if word not there. #rubular
   end
 
-  def request_info
+  def initialize_info
     get_verb
     get_root
     get_protocol
@@ -70,7 +71,9 @@ class Parser
   # end
 
   def all_request_lines
-    lines = individual_requests.each do
+    request_info.map do |key, value|
+      "#{key} #{value}"
+    end.join("\n")
     # "#{first_request_line}\n#{remaining_request_lines}\n#{last_request_line}"
   end
 
