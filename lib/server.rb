@@ -1,14 +1,17 @@
-require_relative 'parser'
+require './lib/parser'
+require './lib/word_search'
+require './lib/response_generator'
 require 'socket'
 require 'pry'
 
 class Server
 
-attr_reader :tcp_server, :count
+attr_reader :tcp_server, :count, :response
 
   def initialize(start = false)
     @tcp_server    = TCPServer.new(9292) if start
     @count         = {hellos: 0, total_requests: 0}
+    @response      = ResponseGenerator.new
   end
 
   def start
@@ -39,50 +42,21 @@ attr_reader :tcp_server, :count
     client.close
   end
 
-  def root_output
-    @parsed_message.request.join("\r\n")
-  end
-
   def check_path
     case @parsed_message.path.downcase
       when "/"
-        return_path_root
+        response.return_path_root(@parsed_message, count)
       when "/hello"
-        return_path_hello
+        response.return_path_hello(count)
       when "/datetime"
-        return_path_datetime
+        response.return_path_datetime(count)
       when "/shutdown"
-        return_path_shutdown
+        response.return_path_shutdown(count)
+      when "/word_search"
+        response.return_path_word_search(@parsed_message, count)
       else
-        return_path_unknown
+        response.return_path_unknown(count)
       end
-  end
-
-  def return_path_root
-    count[:total_requests] += 1
-    "<pre>\n#{@parsed_message.all_request_lines}\n</pre>"
-  end
-
-  def return_path_hello
-    count[:hellos] += 1
-    count[:total_requests] += 1
-    "Hello world (#{count[:hellos]})\n"
-  end
-
-  def return_path_datetime
-    count[:total_requests] += 1
-    Time.new.strftime('%m:%M%p on %A, %B %e, %Y')
-  end
-
-  def return_path_shutdown
-    count[:total_requests] += 1
-    tcp_server.close
-    "Total Requests: #{count[:total_requests]}"
-  end
-
-  def return_path_unknown
-    count[:total_requests] += 1
-    "404 Bro"
   end
 
 end
