@@ -17,22 +17,7 @@ class ParserTest < Minitest::Test
     assert_instance_of Parser, parser
   end
 
-  def test_can_split_first_request_line
-    expected = "Verb: GET\nPath: /\nProtocol: HTTP/1.1"
-    assert_equal expected, parser.first_request_line
-  end
-
-  def test_can_split_middle_request_lines
-    expected = "Host: 127.0.0.1\nPort: 9292\nOrigin: 127.0.0.1"
-    assert_equal expected, parser.remaining_request_lines
-  end
-
-  def test_can_split_last_request_line
-    expected = "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
-    assert_equal expected, parser.last_request_line
-  end
-
-  def test_can_combine_all_modified_request_lines
+  def test_can_print_all_request_lines
     expected = "Verb: GET\nPath: /\nProtocol: HTTP/1.1\nHost: 127.0.0.1\nPort: 9292\nOrigin: 127.0.0.1\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
     assert_equal expected, parser.all_request_lines
   end
@@ -65,8 +50,8 @@ class ParserTest < Minitest::Test
     assert_equal 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', parser.get_accept
   end
 
-  def test_request_hash
-    assert_equal "thing", parser.request_hash
+  def test_initialize_info_populates_request_info_hash
+    refute parser.request_info.empty?
   end
 
 end
