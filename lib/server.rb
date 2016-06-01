@@ -11,7 +11,7 @@ attr_reader :tcp_server, :count, :response
   def initialize(start = false)
     @tcp_server    = TCPServer.new(9292) if start
     @count         = {hellos: 0, total_requests: 0}
-    @response     = ResponseGenerator.new
+    @response      = ResponseGenerator.new
   end
 
   def start

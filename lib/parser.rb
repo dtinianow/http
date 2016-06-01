@@ -7,6 +7,7 @@ class Parser
   def initialize(request)
     @request       = request
     @path          = request[0].split(" ")[1].split('?')[0]
+    @request_lines = {}
   end
 
   #if request[0].split(" ")[1].include?('?')
@@ -38,3 +39,8 @@ class Parser
   end
 
 end
+
+
+# def get_verb
+#   @request_lines["Verb:"] = request[0].split(" ")[0]
+# end
