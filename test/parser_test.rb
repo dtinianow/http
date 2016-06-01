@@ -54,4 +54,10 @@ class ParserTest < Minitest::Test
     refute parser.request_info.empty?
   end
 
+  def test_verb_is_post_returns_a_boolean
+    binding.pry
+    assert_instance_of Boolean, parser.verb_is_post?
+  end
+
+
 end

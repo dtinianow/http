@@ -1,7 +1,10 @@
 require './lib/word_search'
 require './lib/parser'
+require './lib/game'
 
 class ResponseGenerator
+
+  attr_reader :game
 
   def return_path_word_search(parsed_message, count)
     count[:total_requests] += 1
@@ -34,5 +37,17 @@ class ResponseGenerator
     count[:total_requests] += 1
     "404 Bro"
   end
+
+  def return_path_start_game(count)
+    count[:total_requests] += 1
+    @game = Game.new
+    "Good luck!"
+  end
+
+  def return_game_status
+    #print guesses
+    #return whether too high or low
+  end
+
 
 end

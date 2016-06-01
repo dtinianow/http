@@ -38,7 +38,23 @@ class ResponseGeneratorTest < Minitest::Test
     assert_equal 3, s.count[:total_requests]
   end
 
+  def test_start_game_path
+    s = Server.new
+    r = ResponseGenerator.new
+    assert_equal "Good luck!", r.return_path_start_game(s.count)
+    assert_equal 1, s.count[:total_requests]
+  end
 
+  # def test_return_game_status_returns_guess_count
+  #   s = Server.new
+  #   r = ResponseGenerator.new
+  # end
 
+  # def test_game_returns_information_about_guess
+  #   s = Server.new
+  #   r = ResponseGenerator.new
+  #   assert_equal 0, r.guesses
+  #
+  # end
 
 end

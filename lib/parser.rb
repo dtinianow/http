@@ -17,6 +17,10 @@ class Parser
     word  #redirect if word not there. #rubular
   end
 
+  def verb_is_post?
+    request_info["Verb:"] == 'POST'
+  end
+
   def initialize_info
     get_verb
     get_root
