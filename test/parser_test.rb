@@ -9,7 +9,8 @@ class ParserTest < Minitest::Test
   def setup
     @request = ["GET / HTTP/1.1",
                "Host: 127.0.0.1:9292",
-               "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"]
+               "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                "Content-Length: 13"]
     @parser = Parser.new(request)
   end
 
@@ -18,7 +19,7 @@ class ParserTest < Minitest::Test
   end
 
   def test_can_print_all_request_lines
-    expected = "Verb: GET\nPath: /\nProtocol: HTTP/1.1\nHost: 127.0.0.1\nPort: 9292\nOrigin: 127.0.0.1\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+    expected = "Verb: GET\nPath: /\nProtocol: HTTP/1.1\nHost: 127.0.0.1\nPort: 9292\nOrigin: 127.0.0.1\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\nContent Length: 13"
     assert_equal expected, parser.all_request_lines
   end
 
@@ -50,8 +51,18 @@ class ParserTest < Minitest::Test
     assert_equal 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', parser.get_accept
   end
 
+  def test_can_get_content_length
+    assert_equal "13", parser.get_content_length
+  end
+
   def test_initialize_info_populates_request_info_hash
     refute parser.request_info.empty?
   end
+
+
+  # def test_verb_is_post_returns_a_boolean
+  #   assert parser.verb_is_post?.kind_of?(Boolean)
+  # end
+
 
 end

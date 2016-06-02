@@ -7,11 +7,14 @@ require 'pry'
 class Server
 
 attr_reader :tcp_server, :count, :response
+attr_accessor :code, :address
 
   def initialize(start = false)
     @tcp_server    = TCPServer.new(9292) if start
     @count         = {hellos: 0, total_requests: 0}
     @response      = ResponseGenerator.new
+    @code          = "200 ok"
+    @address       = "pizza"
   end
 
   def start
@@ -27,17 +30,19 @@ attr_reader :tcp_server, :count, :response
     while line = client.gets and !line.chomp.empty?
       request_lines << line.chomp
     end
+    @input = client.read(request_lines[3].split(" ")[1].to_i)
     request_lines
   end
 
   def output_client_messages(client)
     output = check_path
-    headers = ["http/1.1 200 ok",
-              "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
-              "server: ruby",
-              "content-type: text/html; charset=iso-8859-1",
-              "content-length: #{output.length}\r\n\r\n"].join("\r\n")
-    client.puts headers
+    @headers = ["http/1.1 #{code}",
+      "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
+      "location: #{address}",
+      "server: ruby",
+      "content-type: text/html; charset=iso-8859-1",
+      "content-length: #{output.length}\r\n\r\n"].join("\r\n")
+    client.puts @headers
     client.puts output
     client.close
   end
@@ -54,6 +59,21 @@ attr_reader :tcp_server, :count, :response
         response.return_path_shutdown(count)
       when "/word_search"
         response.return_path_word_search(@parsed_message, count)
+      when "/start_game"
+        if @parsed_message.verb_is_post?
+          response.return_path_start_game(count)
+        else
+          response.return_path_unknown(count)
+        end
+      when "/game"
+        if @parsed_message.verb_is_post?
+          @code = "300 MOVED"
+          @address = "http://127.0.0.1:9292/game"
+          response.make_a_guess(@input)
+          response.return_game_status(count)
+        else
+          response.return_game_status(count)
+        end
       else
         response.return_path_unknown(count)
       end

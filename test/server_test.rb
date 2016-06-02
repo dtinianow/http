@@ -26,6 +26,12 @@ class ServerTest < Minitest::Test
   end
   #Can we test get_request or start or check_path
 
+  def test_body_of_start_game
+    f = Faraday.post('http://localhost:9292/start_game')
+    assert f.body.include?("Good luck!")
+  end
+
+
 
   # def test_root_path
   #   skip

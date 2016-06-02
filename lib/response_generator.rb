@@ -1,7 +1,10 @@
 require './lib/word_search'
 require './lib/parser'
+require './lib/game'
 
 class ResponseGenerator
+
+  attr_reader :game
 
   def return_path_word_search(parsed_message, count)
     count[:total_requests] += 1
@@ -33,6 +36,23 @@ class ResponseGenerator
   def return_path_unknown(count)
     count[:total_requests] += 1
     "404 Bro"
+  end
+
+  def return_path_start_game(count)
+    count[:total_requests] += 1
+    @game = Game.new
+    "Good luck!"
+  end
+
+  def make_a_guess(input)
+    @game.guess_count += 1
+    @game.guess = input.to_i
+  end
+
+  def return_game_status(count)
+    count[:total_requests] += 1
+    "#{@game.evaluate_guess(@game.guess)}\n
+    You have made #{@game.guess_count} guesses."
   end
 
 end

@@ -4,9 +4,9 @@ class Parser
   attr_reader :request, :request_info, :all_request_lines, :path
 
   def initialize(request)
-    @request       = request
-    @path          = request[0].split(" ")[1].split('?')[0]
-    @request_info = {}
+    @request         = request
+    @path            = request[0].split(" ")[1].split('?')[0]
+    @request_info    = {}
     @initialize_info = initialize_info
   end
 
@@ -17,6 +17,10 @@ class Parser
     word  #redirect if word not there. #rubular
   end
 
+  def verb_is_post?
+    request_info["Verb:"] == 'POST'
+  end
+
   def initialize_info
     get_verb
     get_root
@@ -25,6 +29,7 @@ class Parser
     get_port
     get_origin
     get_accept
+    get_content_length
   end
 
   def get_verb
@@ -55,6 +60,13 @@ class Parser
     request_info["Accept:"] = request[2].split(" ")[1]
   end
 
+  def get_content_length
+    request_info["Content Length:"] = request[3].split(" ")[1]
+  end
+
+  def get_guess_from_user
+    
+  end
   # def first_request_line
   #   first_line = request[0].split(" ")
   #   "Verb: #{first_line[0]}\nPath: #{first_line[1]}\nProtocol: #{first_line[2]}"
