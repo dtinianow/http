@@ -45,19 +45,14 @@ class ResponseGenerator
   end
 
   def make_a_guess(input)
-    @game.guess = input.to_i
     @game.guess_count += 1
+    @game.guess = input.to_i
   end
 
   def return_game_status(count)
     count[:total_requests] += 1
-    # @game.guess = input.to_i
     "#{@game.evaluate_guess(@game.guess)}\n
     You have made #{@game.guess_count} guesses."
   end
-
-
-
-
 
 end

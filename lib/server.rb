@@ -7,11 +7,14 @@ require 'pry'
 class Server
 
 attr_reader :tcp_server, :count, :response
+attr_accessor :code, :address
 
   def initialize(start = false)
     @tcp_server    = TCPServer.new(9292) if start
     @count         = {hellos: 0, total_requests: 0}
     @response      = ResponseGenerator.new
+    @code          = "200 ok"
+    @address       = "pizza"
   end
 
   def start
@@ -33,12 +36,13 @@ attr_reader :tcp_server, :count, :response
 
   def output_client_messages(client)
     output = check_path
-    headers = ["http/1.1 200 ok",
+    @headers = ["http/1.1 #{code}",
       "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
+      "location: #{address}",
       "server: ruby",
       "content-type: text/html; charset=iso-8859-1",
       "content-length: #{output.length}\r\n\r\n"].join("\r\n")
-    client.puts headers
+    client.puts @headers
     client.puts output
     client.close
   end
@@ -63,6 +67,8 @@ attr_reader :tcp_server, :count, :response
         end
       when "/game"
         if @parsed_message.verb_is_post?
+          @code = "300 MOVED"
+          @address = "http://127.0.0.1:9292/game"
           response.make_a_guess(@input)
           response.return_game_status(count)
         else
