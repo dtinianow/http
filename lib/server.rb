@@ -6,15 +6,11 @@ require 'pry'
 
 class Server
 
-attr_reader :tcp_server, :count, :response
-attr_accessor :code, :address
+attr_reader :tcp_server, :response
 
   def initialize(start = false)
     @tcp_server    = TCPServer.new(9292) if start
-    @count         = {hellos: 0, total_requests: 0}
     @response      = ResponseGenerator.new
-    @code          = "200 ok"
-    @address       = "pizza"
   end
 
   def start
@@ -34,51 +30,49 @@ attr_accessor :code, :address
     request_lines
   end
 
-  def output_client_messages(client)
-    output = check_path
-    @headers = ["http/1.1 #{code}",
-      "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
-      "location: #{address}",
-      "server: ruby",
-      "content-type: text/html; charset=iso-8859-1",
-      "content-length: #{output.length}\r\n\r\n"].join("\r\n")
-    client.puts @headers
-    client.puts output
-    client.close
-  end
-
   def check_path
+    response.reset_response_code
     case @parsed_message.path.downcase
       when "/"
-        response.return_path_root(@parsed_message, count)
+        response.return_path_root(@parsed_message)
       when "/hello"
-        response.return_path_hello(count)
+        response.return_path_hello
       when "/datetime"
-        response.return_path_datetime(count)
+        response.return_path_datetime
       when "/shutdown"
-        response.return_path_shutdown(count)
+        response.return_path_shutdown(tcp_server)
       when "/word_search"
-        response.return_path_word_search(@parsed_message, count)
+        response.return_path_word_search(@parsed_message)
       when "/start_game"
         if @parsed_message.verb_is_post?
-          response.return_path_start_game(count)
+          response.return_path_start_game
         else
-          response.return_path_unknown(count)
+          response.return_path_unknown
         end
       when "/game"
         if @parsed_message.verb_is_post?
-          @code = "300 MOVED"
-          @address = "http://127.0.0.1:9292/game"
           response.make_a_guess(@input)
-          response.return_game_status(count)
+          response.return_redirect
         else
-          response.return_game_status(count)
+          response.return_game_status
         end
       else
-        response.return_path_unknown(count)
+        response.return_path_unknown
       end
   end
 
+  def output_client_messages(client)
+    output = check_path
+    @headers = ["HTTP/1.1 #{response.code}",
+      "location: #{response.address}",
+      "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
+      "server: ruby",
+      "content-type: text/html; charset=iso-8859-1",
+      "content-length: #{output.length}\r\n\r\n"].join("\r\n")
+      client.puts @headers
+      client.puts output
+      client.close
+    end
 end
 
 if __FILE__ == $0

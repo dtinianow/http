@@ -6,8 +6,6 @@ class Parser
   def initialize(request)
     @request         = request
     @path            = request[0].split(" ")[1].split('?')[0]
-    # @request_info    = {}
-    # @initialize_info = initialize_info
   end
 
   def word
@@ -20,17 +18,6 @@ class Parser
   def verb_is_post?
     request_info["Verb:"] == 'POST'
   end
-
-  # def initialize_info
-  #   get_verb
-  #   get_root
-  #   get_protocol
-  #   get_host
-  #   get_port
-  #   get_origin
-  #   get_accept
-  #   get_content_length
-  # end
 
   def request_info
     {   "Verb:" => get_verb,
