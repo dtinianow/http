@@ -23,5 +23,15 @@ class GameTest < Minitest::Test
     assert game.solution >= 0
   end
 
+  def test_guess_initializes_to_zero
+    game = Game.new
+    assert_equal 0, game.guess
+  end
+
+  def test_evaluates_guess_compared_to_solution
+    game = Game.new
+    guess = game.solution
+    assert_equal "Correct!", game.evaluate_guess(guess)
+  end
 
 end

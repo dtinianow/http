@@ -44,10 +44,15 @@ class ResponseGenerator
     "Good luck!"
   end
 
-  def return_game_status
-    #print guesses
-    #return whether too high or low
+  def make_a_guess(input, count)
+    count[:total_requests] += 1
+    @game.guess = input
   end
+
+  # def return_game_status
+  #   #print guesses
+  #   #return whether too high or low
+  # end
 
 
 end

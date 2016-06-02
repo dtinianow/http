@@ -27,16 +27,17 @@ attr_reader :tcp_server, :count, :response
     while line = client.gets and !line.chomp.empty?
       request_lines << line.chomp
     end
+    @input = client.read(request_lines[3].split(" ")[1].to_i)
     request_lines
   end
 
   def output_client_messages(client)
     output = check_path
     headers = ["http/1.1 200 ok",
-              "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
-              "server: ruby",
-              "content-type: text/html; charset=iso-8859-1",
-              "content-length: #{output.length}\r\n\r\n"].join("\r\n")
+      "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
+      "server: ruby",
+      "content-type: text/html; charset=iso-8859-1",
+      "content-length: #{output.length}\r\n\r\n"].join("\r\n")
     client.puts headers
     client.puts output
     client.close
@@ -60,10 +61,17 @@ attr_reader :tcp_server, :count, :response
         else
           response.return_path_unknown(count)
         end
-      # when "/game"
-          #check parser.request_info["Verb:"]
-            #If verb is GET
-              #Return number of guesses made
+      when "/game"
+        if @parsed_message.verb_is_post?
+          response.return_path_unknown(count)
+          # response.make_a_guess(@input, count)
+          #save @input as a guess in game
+          #return_path_game(count)
+        else
+          response.return_path_unknown(count)
+        end
+      #       #If verb is GET
+      #         #Return number of guesses made
               #Return whether most recent guess was too high, too low, or correct
             #If verb is POST && parameter == 'guess'
               #save guess, increase guess count, and send redirect to GET page

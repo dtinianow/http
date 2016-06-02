@@ -29,6 +29,7 @@ class Parser
     get_port
     get_origin
     get_accept
+    get_content_length
   end
 
   def get_verb
@@ -59,6 +60,13 @@ class Parser
     request_info["Accept:"] = request[2].split(" ")[1]
   end
 
+  def get_content_length
+    request_info["Content Length:"] = request[3].split(" ")[1]
+  end
+
+  def get_guess_from_user
+    
+  end
   # def first_request_line
   #   first_line = request[0].split(" ")
   #   "Verb: #{first_line[0]}\nPath: #{first_line[1]}\nProtocol: #{first_line[2]}"
