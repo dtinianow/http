@@ -13,8 +13,6 @@ class GameTest < Minitest::Test
   def test_guess_counter_increments
     game = Game.new
     assert_equal 0, game.guess_count
-    game.guess_counter
-    assert_equal 1, game.guess_count
   end
 
   def test_game_generates_a_solution

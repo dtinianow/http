@@ -63,18 +63,11 @@ attr_reader :tcp_server, :count, :response
         end
       when "/game"
         if @parsed_message.verb_is_post?
-          response.return_path_unknown(count)
-          # response.make_a_guess(@input, count)
-          #save @input as a guess in game
-          #return_path_game(count)
+          response.make_a_guess(@input)
+          response.return_game_status(count)
         else
-          response.return_path_unknown(count)
+          response.return_game_status(count)
         end
-      #       #If verb is GET
-      #         #Return number of guesses made
-              #Return whether most recent guess was too high, too low, or correct
-            #If verb is POST && parameter == 'guess'
-              #save guess, increase guess count, and send redirect to GET page
       else
         response.return_path_unknown(count)
       end
