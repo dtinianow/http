@@ -19,14 +19,14 @@ class ResponseGeneratorTest < Minitest::Test
 
   def test_unknown_path
     r = ResponseGenerator.new
-    assert_equal "404 Bro", r.return_path_unknown
+    assert_equal "404 Not Found", r.return_path_404_unknown
     assert_equal 1, r.count[:total_requests]
   end
 
   def test_total_requests_between_pages
     r = ResponseGenerator.new
     assert_equal 0, r.count[:total_requests]
-    r.return_path_unknown
+    r.return_path_404_unknown
     assert_equal 1, r.count[:total_requests]
     r.return_path_hello
     assert_equal 2, r.count[:total_requests]
@@ -57,7 +57,7 @@ class ResponseGeneratorTest < Minitest::Test
 
   def test_return_redirect_displays_a_redirect_message
     r = ResponseGenerator.new
-    assert_equal "302 Redirecting", r.return_redirect
+    assert_equal "302 Redirecting", r.return_path_302_redirect
   end
 
   def test_reset_response_code_sets_default_values

@@ -9,7 +9,7 @@ class Server
 attr_reader :tcp_server, :response
 
   def initialize(start = false)
-    @tcp_server    = TCPServer.new(9292) if start
+    @tcp_server    = TCPServer.new(9291) if start
     @response      = ResponseGenerator.new
   end
 
@@ -45,19 +45,25 @@ attr_reader :tcp_server, :response
         response.return_path_word_search(@parsed_message)
       when "/start_game"
         if @parsed_message.verb_is_post?
-          response.return_path_start_game
+          if response.game_in_progress
+            response.return_path_403_forbidden
+          else
+            response.return_path_start_game
+          end
         else
-          response.return_path_unknown
+          response.return_path_404_unknown
         end
       when "/game"
         if @parsed_message.verb_is_post?
           response.make_a_guess(@input)
-          response.return_redirect
+          response.return_path_302_redirect
         else
           response.return_game_status
         end
+      # when "/force_error"
+      #   response.return_path_500_error
       else
-        response.return_path_unknown
+        response.return_path_404_unknown
       end
   end
 
