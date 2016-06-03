@@ -6,8 +6,6 @@ class Parser
   def initialize(request)
     @request         = request
     @path            = request[0].split(" ")[1].split('?')[0]
-    @request_info    = {}
-    @initialize_info = initialize_info
   end
 
   def word
@@ -21,52 +19,52 @@ class Parser
     request_info["Verb:"] == 'POST'
   end
 
-  def initialize_info
-    get_verb
-    get_root
-    get_protocol
-    get_host
-    get_port
-    get_origin
-    get_accept
-    get_content_length
+  def request_info
+    {   "Verb:" => get_verb,
+        "Path:" => get_root,
+        "Protocol:" => get_protocol,
+        "Host:" => get_host,
+        "Port:" => get_port,
+        "Origin:" => get_origin,
+        "Accept:" => get_accept,
+        "Content Length:" => get_content_length}
   end
 
   def get_verb
-    request_info["Verb:"] = request[0].split(" ")[0]
+    request[0].split(" ")[0]
   end
 
   def get_root
-    request_info["Path:"] = request[0].split(" ")[1]
+    request[0].split(" ")[1]
   end
 
   def get_protocol
-    request_info["Protocol:"] = request[0].split(" ")[2]
+    request[0].split(" ")[2]
   end
 
   def get_host
-    request_info["Host:"] = request[1].delete(" ").split(":")[1]
+    request[1].delete(" ").split(":")[1]
   end
 
   def get_port
-    request_info["Port:"] = request[1].delete(" ").split(":")[2]
+    request[1].delete(" ").split(":")[2]
   end
 
   def get_origin
-    request_info["Origin:"] = request[1].delete(" ").split(":")[1]
+    request[1].delete(" ").split(":")[1]
   end
 
   def get_accept
-    request_info["Accept:"] = request[2].split(" ")[1]
+    request[2].split(" ")[1]
   end
 
   def get_content_length
-    request_info["Content Length:"] = request[3].split(" ")[1]
+    request[3].split(" ")[1]
   end
 
-  def get_guess_from_user
-    
-  end
+  # def get_guess_from_user
+  #
+  # end
   # def first_request_line
   #   first_line = request[0].split(" ")
   #   "Verb: #{first_line[0]}\nPath: #{first_line[1]}\nProtocol: #{first_line[2]}"

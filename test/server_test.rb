@@ -24,20 +24,15 @@ class ServerTest < Minitest::Test
     f = Faraday.get('http://localhost:9292/hello')
     assert f.body.include?("Hello world")
   end
-  #Can we test get_request or start or check_path
 
   def test_body_of_start_game
     f = Faraday.post('http://localhost:9292/start_game')
     assert f.body.include?("Good luck!")
   end
 
-
-
-  # def test_root_path
-  #   skip
-  #   s = Server.new(true)
-  #   s.start
-  #   s.return_path_root
-  #   assert_equal 1, s.count[:total_requests]
-  # end
+  def test_body_of_game
+    Faraday.post('http://localhost:9292/start_game')
+    f = Faraday.get('http://localhost:9292/game')
+    assert f.body.include?("Your guess count is")
+  end
 end

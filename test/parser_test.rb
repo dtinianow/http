@@ -7,11 +7,11 @@ class ParserTest < Minitest::Test
   attr_reader :request, :parser
 
   def setup
-    @request = ["GET / HTTP/1.1",
-               "Host: 127.0.0.1:9292",
-               "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    @request  = ["GET / HTTP/1.1",
+                "Host: 127.0.0.1:9292",
+                "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
                 "Content-Length: 13"]
-    @parser = Parser.new(request)
+    @parser     = Parser.new(request)
   end
 
   def test_parser_exists
@@ -55,9 +55,9 @@ class ParserTest < Minitest::Test
     assert_equal "13", parser.get_content_length
   end
 
-  def test_initialize_info_populates_request_info_hash
-    refute parser.request_info.empty?
-  end
+  # def test_initialize_info_populates_request_info_hash
+  #   refute parser.request_info.empty?
+  # end
 
 
   # def test_verb_is_post_returns_a_boolean
