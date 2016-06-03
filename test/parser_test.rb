@@ -55,14 +55,4 @@ class ParserTest < Minitest::Test
     assert_equal "13", parser.get_content_length
   end
 
-  # def test_initialize_info_populates_request_info_hash
-  #   refute parser.request_info.empty?
-  # end
-
-
-  # def test_verb_is_post_returns_a_boolean
-  #   assert parser.verb_is_post?.kind_of?(Boolean)
-  # end
-
-
 end

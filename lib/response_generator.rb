@@ -4,12 +4,13 @@ require './lib/game'
 
 class ResponseGenerator
 
-  attr_reader :game, :count, :address, :code
+  attr_reader :game, :count, :address, :code, :game_in_progress
 
   def initialize
     @count   = {hellos: 0, total_requests: 0}
     @code    = "200 OK"
     @address = "pizza"
+    @game_in_progress = false
   end
 
   def return_path_word_search(parsed_message)
@@ -39,20 +40,16 @@ class ResponseGenerator
     "Total Requests: #{count[:total_requests]}"
   end
 
-  def return_path_unknown
-    count[:total_requests] += 1
-    "404 Bro"
-  end
 
   def return_path_start_game
     count[:total_requests] += 1
     @game = Game.new
+    @game_in_progress = true
     "Good luck!"
   end
 
   def make_a_guess(input)
-    @code = "302 MOVED"
-    @address = "http://127.0.0.1:9292/game"
+    count[:total_requests] += 1
     @game.guess_count += 1
     @game.guess = input.to_i
   end
@@ -62,13 +59,34 @@ class ResponseGenerator
     "#{@game.evaluate_guess(@game.guess)}\nYour guess count is #{@game.guess_count}."
   end
 
-  def return_redirect
-    "302 Redirecting"
-  end
-
   def reset_response_code
     @code    = "200 OK"
     @address = "pizza"
   end
 
+  def return_path_302_redirect
+    @address = "http://127.0.0.1:9292/game"
+    @code = "302 MOVED"
+    "302 Redirecting"
+  end
+
+  def return_path_403_forbidden
+    count[:total_requests] += 1
+    @code = "403 Forbidden"
+    "403 Forbidden"
+  end
+
+  def return_path_404_unknown
+    count[:total_requests] += 1
+    @code = "404 Not Found"
+    "404 Not Found"
+  end
+
+  def return_path_500_error
+    count[:total_requests] += 1
+    @code = "500 Internal Server Error"
+    raise SystemError
+    rescue => exception
+    "500 Internal Service Error\n" + exception.backtrace.join("\n")
+  end
 end

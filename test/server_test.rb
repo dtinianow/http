@@ -27,12 +27,17 @@ class ServerTest < Minitest::Test
 
   def test_body_of_start_game
     f = Faraday.post('http://localhost:9292/start_game')
-    assert f.body.include?("Good luck!")
+    assert f.body.kind_of?(String)
   end
 
   def test_body_of_game
     Faraday.post('http://localhost:9292/start_game')
     f = Faraday.get('http://localhost:9292/game')
     assert f.body.include?("Your guess count is")
+  end
+
+  def test_body_of_force_error
+    f = Faraday.get('http://localhost:9292/force_error')
+    assert f.body.include?("500")
   end
 end
