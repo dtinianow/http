@@ -9,7 +9,7 @@ class ResponseGenerator
   def initialize
     @count   = {hellos: 0, total_requests: 0}
     @code    = "200 OK"
-    @address = "pizza"
+    @address = ""
     @game_in_progress = false
   end
 
@@ -61,7 +61,7 @@ class ResponseGenerator
 
   def reset_response_code
     @code    = "200 OK"
-    @address = "pizza"
+    @address = ""
   end
 
   def return_path_302_redirect

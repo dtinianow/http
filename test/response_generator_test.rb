@@ -61,7 +61,7 @@ class ResponseGeneratorTest < Minitest::Test
     r.make_a_guess(50)
     r.reset_response_code
     assert_equal "200 OK", r.code
-    assert_equal "pizza", r.address
+    assert_equal "", r.address
   end
 
   def test_return_redirect_displays_a_redirect_message

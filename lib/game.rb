@@ -18,5 +18,4 @@ class Game
       "Your guess is too low."
     end
   end
-
 end
