@@ -35,4 +35,9 @@ class ServerTest < Minitest::Test
     f = Faraday.get('http://localhost:9292/game')
     assert f.body.include?("Your guess count is")
   end
+
+  def test_body_of_force_error
+    f = Faraday.get('http://localhost:9292/force_error')
+    assert f.body.include?("500")
+  end
 end

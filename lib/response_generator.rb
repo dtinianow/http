@@ -82,10 +82,11 @@ class ResponseGenerator
     "404 Not Found"
   end
 
-  # def return_path_500_error
-  #   count[:total_requests] += 1
-  #   @code = "500 Internal Server Error"
-  #   "OH SNAP, SOMETHING BROKE ON THE SERVER!"
-  #   raise SystemStackError, caller
-  # end
+  def return_path_500_error
+    count[:total_requests] += 1
+    @code = "500 Internal Server Error"
+    raise SystemError
+    rescue => exception
+    "500 Internal Service Error\n" + exception.backtrace.join("\n")
+  end
 end

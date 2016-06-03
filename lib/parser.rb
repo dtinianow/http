@@ -12,7 +12,7 @@ class Parser
     if request[0].split(" ")[1].split('?')[1].split('=')[0] == 'word'
       word = request[0].split(" ")[1].split('?')[1].split('=')[1]
     end
-    word  #redirect if word not there. #rubular
+    word
   end
 
   def verb_is_post?
@@ -62,29 +62,10 @@ class Parser
     request[3].split(" ")[1]
   end
 
-  # def get_guess_from_user
-  #
-  # end
-  # def first_request_line
-  #   first_line = request[0].split(" ")
-  #   "Verb: #{first_line[0]}\nPath: #{first_line[1]}\nProtocol: #{first_line[2]}"
-  # end
-  #
-  # def remaining_request_lines
-  #   second_line = request[1].delete(" ").split(":")
-  #   "Host: #{second_line[1]}\nPort: #{second_line[2]}\nOrigin: #{second_line[1]}"
-  # end
-  #
-  # def last_request_line
-  #   last_line = request[2].split(" ")
-  #   "Accept: #{last_line[1]}"
-  # end
-
   def all_request_lines
     request_info.map do |key, value|
       "#{key} #{value}"
     end.join("\n")
-    # "#{first_request_line}\n#{remaining_request_lines}\n#{last_request_line}"
   end
 
 end

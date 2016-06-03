@@ -9,7 +9,7 @@ class Server
 attr_reader :tcp_server, :response
 
   def initialize(start = false)
-    @tcp_server    = TCPServer.new(9291) if start
+    @tcp_server    = TCPServer.new(9292) if start
     @response      = ResponseGenerator.new
   end
 
@@ -60,8 +60,8 @@ attr_reader :tcp_server, :response
         else
           response.return_game_status
         end
-      # when "/force_error"
-      #   response.return_path_500_error
+      when "/force_error"
+        response.return_path_500_error
       else
         response.return_path_404_unknown
       end

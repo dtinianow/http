@@ -55,11 +55,6 @@ class ResponseGeneratorTest < Minitest::Test
     assert r.return_game_status.include?(expected)
   end
 
-  def test_return_redirect_displays_a_redirect_message
-    r = ResponseGenerator.new
-    assert_equal "302 Redirecting", r.return_path_302_redirect
-  end
-
   def test_reset_response_code_sets_default_values
     r = ResponseGenerator.new
     r.return_path_start_game
@@ -67,6 +62,26 @@ class ResponseGeneratorTest < Minitest::Test
     r.reset_response_code
     assert_equal "200 OK", r.code
     assert_equal "pizza", r.address
+  end
+
+  def test_return_redirect_displays_a_redirect_message
+    r = ResponseGenerator.new
+    assert_equal "302 Redirecting", r.return_path_302_redirect
+  end
+
+  def test_return_path_403_forbidden_returns_message
+    r = ResponseGenerator.new
+    assert_equal "403 Forbidden", r.return_path_403_forbidden
+  end
+
+  def test_return_path_404_unknown
+    r = ResponseGenerator.new
+    assert_equal "404 Not Found", r.return_path_404_unknown
+  end
+
+  def test_return_path_500_error
+    r = ResponseGenerator.new
+    assert r.return_path_500_error.include?("500 Internal Service Error")
   end
 
 end
