@@ -67,5 +67,4 @@ class Parser
       "#{key} #{value}"
     end.join("\n")
   end
-
 end
